@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("error reading config: %v\n", err)
 	}
-	cfg.SetUser("xuaspick")
+	// cfg.SetUser("xuaspick")
 
 	cfg, err = config.Read()
 	if err != nil {
