@@ -19,6 +19,14 @@ func main() {
 	state := &repl.State{
 		Cfg: &cfg,
 	}
+
+	db, err := sql.Open("postgres", state.Cfg.DBURL)
+	if err != nil {
+		log.Fatalf("error connecting to db: %v", err)
+	}
+	defer db.Close()
+	state.DB = database.New(db)
+
 	cmds := repl.GetCommands()
 	cmds.Register("login", repl.HandlerLogin)
 	cmds.Register("register", repl.HandlerRegister)
@@ -31,8 +39,6 @@ func main() {
 		Name: os.Args[1],
 		Args: os.Args[2:],
 	}
-	db, err := sql.Open("postgres", state.Cfg.DBURL)
-	state.DB = database.New(db)
 
 	err = cmds.Run(state, cmd)
 	if err != nil {

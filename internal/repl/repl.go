@@ -27,20 +27,6 @@ func GetCommands() *commands {
 	}
 }
 
-// func HandlerLogin(s *State, cmd Command) error {
-// 	if len(cmd.Args) == 0 {
-// 		return fmt.Errorf("Login command expects the username argument")
-// 	}
-
-// 	err := s.Cfg.SetUser(cmd.Args[0])
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	fmt.Printf("%v has been set as userName\n", s.Cfg.CurrentUserName)
-// 	return nil
-// }
-
 func (c *commands) Run(s *State, cmd Command) error {
 	f, ok := c.m[cmd.Name]
 	if !ok {
