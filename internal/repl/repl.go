@@ -4,51 +4,51 @@ import (
 	"fmt"
 
 	"github.com/xuaspick/gator/internal/config"
+	"github.com/xuaspick/gator/internal/database"
 )
 
-type state struct {
-	Config *config.Config
+type State struct {
+	DB  *database.Queries
+	Cfg *config.Config
 }
 
-type command struct {
-	name string
-	args []string
+type Command struct {
+	Name string
+	Args []string
 }
 
 type commands struct {
-	m map[string]func(*state, command) error
+	m map[string]func(*State, Command) error
 }
 
 func GetCommands() *commands {
 	return &commands{
-		m: map[string]func(*state, command) error{
-			"login": HandlerLogin,
-		},
+		m: map[string]func(*State, Command) error{},
 	}
 }
 
-func HandlerLogin(s *state, cmd command) error {
-	if len(cmd.args) == 0 {
-		return fmt.Errorf("Login command expects the username argument")
-	}
+// func HandlerLogin(s *State, cmd Command) error {
+// 	if len(cmd.Args) == 0 {
+// 		return fmt.Errorf("Login command expects the username argument")
+// 	}
 
-	err := s.Config.SetUser(cmd.args[0])
-	if err != nil {
-		return err
-	}
+// 	err := s.Cfg.SetUser(cmd.Args[0])
+// 	if err != nil {
+// 		return err
+// 	}
 
-	fmt.Printf("%v has been set as userName", s.Config.CurrentUserName)
-	return nil
-}
+// 	fmt.Printf("%v has been set as userName\n", s.Cfg.CurrentUserName)
+// 	return nil
+// }
 
-func (c *commands) run(s *state, cmd command) error {
-	f, ok := c.m[cmd.name]
+func (c *commands) Run(s *State, cmd Command) error {
+	f, ok := c.m[cmd.Name]
 	if !ok {
-		return fmt.Errorf("The comand %v is not registered", cmd.name)
+		return fmt.Errorf("The comand %v is not registered", cmd.Name)
 	}
 	return f(s, cmd)
 }
 
-func (c *commands) register(name string, f func(*state, command) error) {
+func (c *commands) Register(name string, f func(*State, Command) error) {
 	c.m[name] = f
 }

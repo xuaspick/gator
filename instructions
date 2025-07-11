@@ -1,0 +1,39 @@
+# ## INSTALL Postgresql
+
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+
+# to check if it's installed
+psql --version
+
+# set the system's password
+sudo passwd postgres
+
+# initiate the service
+sudo service postgresql start
+
+# ###########
+# enter the psql shell
+sudo -u postgres psql
+
+# (in the psql shell) Create database "gator"
+CREATE DATABASE gator;
+
+# connect to the new database
+\c gator
+
+# set the database's user password (linux only)
+ALTER USER postgres PASSWORD 'postgres';
+
+# exit the psql shell
+exit
+# #######
+
+# ## INSTALL goose
+go install github.com/pressly/goose/v3/cmd/goose@latest
+
+# ## INSTALL sqlc
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+# ## CREATE ~/.gatorconfig.json with this data:
+{"db_url":"postgres://postgres:postgres@localhost:5432/gator?sslmode=disable","current_user_name":"default"}
